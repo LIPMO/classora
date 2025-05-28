@@ -133,6 +133,31 @@
   </section>
 
 <script>
+  const exportNoteBtn = document.getElementById('exportNoteBtn');
+
+exportNoteBtn.addEventListener('click', () => {
+  const courseName = courseNameInput.value.trim();
+  const chapterTitle = chapterTitleInput.value.trim();
+  const noteContent = noteContentInput.value.trim();
+
+  if (!courseName) {
+    alert("Le nom du cours est obligatoire pour l'export !");
+    return;
+  }
+
+  const fileContent = `# ${courseName}\n\n## ${chapterTitle || 'Sans titre'}\n\n${noteContent}`;
+
+  const blob = new Blob([fileContent], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${courseName.replace(/\s+/g, '_')}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
   const pdfFrame = document.getElementById('pdfFrame');
   const togglePdfBtn = document.getElementById('togglePdfBtn');
   const saveNoteBtn = document.getElementById('saveNoteBtn');
